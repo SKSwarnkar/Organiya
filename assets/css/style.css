@@ -323,10 +323,10 @@
 
   .superfood-item img {
     width: 100%;
-    aspect-ratio: 4 / 3;
     object-fit: cover;
     border-radius: 10px;
     display: block;
+    max-height: 320px;
   }
   
   /* Handle missing images with CSS content */
@@ -913,7 +913,7 @@
     }
 
     .superfood-item img {
-      aspect-ratio: 3 / 2;
+      max-height: 260px;
     }
     
     section > .container {
@@ -943,7 +943,8 @@
     }
 
     .superfood-item img {
-      aspect-ratio: 4 / 3;
+      max-height: 220px;
+      height: auto;
     }
   }
   
