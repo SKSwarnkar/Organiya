@@ -7,6 +7,9 @@ document.addEventListener('DOMContentLoaded', function() {
     
     // Handle missing images
     initImageFallbacks();
+
+    // Initialize mobile navigation toggle
+    initMobileNav();
     
     // Initialize holiday specials if on homepage
     if (document.getElementById('holidaySpecials')) {
@@ -24,7 +27,51 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 });
 
-let emailJsInitialized = false;
+// Mobile navigation
+function initMobileNav() {
+    const navs = Array.from(document.querySelectorAll('header nav'));
+    if (navs.length === 0) return;
+
+    navs.forEach(nav => {
+        const toggle = nav.querySelector('.nav-toggle');
+        const menuLinks = nav.querySelectorAll('ul a');
+
+        if (!toggle) {
+            return;
+        }
+
+        const closeMenu = () => {
+            nav.classList.remove('open');
+            toggle.setAttribute('aria-expanded', 'false');
+        };
+
+        toggle.addEventListener('click', function() {
+            const shouldOpen = !nav.classList.contains('open');
+            if (shouldOpen) {
+                nav.classList.add('open');
+            } else {
+                nav.classList.remove('open');
+            }
+            toggle.setAttribute('aria-expanded', shouldOpen ? 'true' : 'false');
+        });
+
+        menuLinks.forEach(link => {
+            link.addEventListener('click', closeMenu);
+        });
+    });
+
+    window.addEventListener('resize', function() {
+        if (window.innerWidth > 768) {
+            navs.forEach(nav => nav.classList.remove('open'));
+            navs.forEach(nav => {
+                const toggle = nav.querySelector('.nav-toggle');
+                if (toggle) {
+                    toggle.setAttribute('aria-expanded', 'false');
+                }
+            });
+        }
+    });
+}
 
 // Image Fallback Handler
 function initImageFallbacks() {
@@ -236,171 +283,6 @@ function initTestimonialsFilter() {
                 }
             });
         });
-    });
-}
-
-
-// Distributorship Form Validation
-function initDistributorshipForm() {
-    const form = document.getElementById('distributorshipForm');
-    if (!form) return;
-    
-    form.addEventListener('submit', function(e) {
-        e.preventDefault();
-        
-        // Validate required fields
-        const requiredFields = ['companyName', 'businessType', 'yearsInBusiness', 'businessAddress', 'country', 'contactName', 'contactTitle', 'email', 'phone'];
-        let isValid = true;
-        
-        requiredFields.forEach(fieldId => {
-            const field = document.getElementById(fieldId);
-            if (!field || !field.value.trim()) {
-                isValid = false;
-                field.style.borderColor = '#dc3545';
-            } else {
-                field.style.borderColor = '#ddd';
-            }
-        });
-        
-        // Check at least one product interest
-        const productInterests = form.querySelectorAll('input[name="productInterest"]:checked');
-        if (productInterests.length === 0) {
-            alert('Please select at least one product of interest.');
-            isValid = false;
-        }
-        
-        // Check terms acceptance
-        const terms = form.querySelector('input[name="terms"]');
-        if (!terms || !terms.checked) {
-            alert('Please accept the terms and conditions.');
-            isValid = false;
-        }
-        
-        // Email validation
-        const email = document.getElementById('email').value.trim();
-        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-        if (!emailRegex.test(email)) {
-            alert('Please enter a valid email address.');
-            isValid = false;
-        }
-        
-        if (!isValid) {
-            return;
-        }
-        
-        // Initialize EmailJS if available (replace placeholder with your real public key)
-        if (typeof emailjs !== 'undefined' && !emailJsInitialized) {
-            emailjs.init('YOUR_PUBLIC_KEY'); // Replace with your EmailJS Public Key
-            emailJsInitialized = true;
-        }
-        
-        // Disable submit button during processing
-        const submitButton = form.querySelector('button[type="submit"]');
-        const originalButtonText = submitButton.textContent;
-        submitButton.disabled = true;
-        submitButton.textContent = 'Submitting...';
-        
-        // Collect all form data
-        const formData = {
-            company_name: document.getElementById('companyName').value.trim(),
-            business_type: document.getElementById('businessType').value,
-            years_in_business: document.getElementById('yearsInBusiness').value,
-            business_address: document.getElementById('businessAddress').value.trim(),
-            country: document.getElementById('country').value.trim(),
-            contact_name: document.getElementById('contactName').value.trim(),
-            contact_title: document.getElementById('contactTitle').value.trim(),
-            email: document.getElementById('email').value.trim(),
-            phone: document.getElementById('phone').value.trim(),
-            website: document.getElementById('website').value.trim() || 'N/A',
-            tax_id: document.getElementById('taxId').value.trim() || 'N/A',
-            product_interests: Array.from(form.querySelectorAll('input[name="productInterest"]:checked')).map(cb => cb.value).join(', '),
-            estimated_volume: document.getElementById('estimatedVolume').value || 'Not specified',
-            target_markets: document.getElementById('targetMarkets').value || 'Not specified',
-            storage_capacity: document.getElementById('storageCapacity').value.trim() || 'Not specified',
-            distribution_network: document.getElementById('distributionNetwork').value.trim() || 'Not specified',
-            experience: document.getElementById('experience').value.trim() || 'Not specified',
-            references: document.getElementById('references').value.trim() || 'None provided',
-            additional_info: document.getElementById('additionalInfo').value.trim() || 'None'
-        };
-        
-        // Format message for email
-        const emailMessage = `
-New Distributorship Application:
-
-COMPANY INFORMATION:
-Company Name: ${formData.company_name}
-Business Type: ${formData.business_type}
-Years in Business: ${formData.years_in_business}
-Business Address: ${formData.business_address}
-Country: ${formData.country}
-Tax ID/EIN: ${formData.tax_id}
-Website: ${formData.website}
-
-CONTACT INFORMATION:
-Contact Name: ${formData.contact_name}
-Title: ${formData.contact_title}
-Email: ${formData.email}
-Phone: ${formData.phone}
-
-PRODUCT INTERESTS:
-${formData.product_interests}
-
-BUSINESS DETAILS:
-Estimated Monthly Volume: ${formData.estimated_volume}
-Target Markets: ${formData.target_markets}
-
-STORAGE & DISTRIBUTION:
-Storage Capacity: ${formData.storage_capacity}
-
-Distribution Network:
-${formData.distribution_network}
-
-EXPERIENCE:
-${formData.experience}
-
-REFERENCES:
-${formData.references}
-
-ADDITIONAL INFORMATION:
-${formData.additional_info}
-        `.trim();
-        
-        const templateParams = {
-            from_name: formData.contact_name,
-            from_email: formData.email,
-            company_name: formData.company_name,
-            message: emailMessage,
-            to_email: 'info@organiyaglobal.com'
-        };
-        
-        // Send email using EmailJS
-        // Note: You may want to create a separate template for distributorship applications
-        // Use the same Service ID, but you can use a different Template ID if desired
-        if (typeof emailjs !== 'undefined') {
-            emailjs.send('YOUR_SERVICE_ID', 'YOUR_TEMPLATE_ID', templateParams)
-                .then(function(response) {
-                    console.log('Distributorship application sent successfully!', response.status, response.text);
-                    alert('Thank you for your distributorship application! We have received your information and will review it. We will contact you within 5-7 business days.');
-                    form.reset();
-                })
-                .catch(function(error) {
-                    console.error('Error sending distributorship application:', error);
-                    // Fallback: open mailto link
-                    const mailtoSubject = encodeURIComponent('Distributorship Application from ' + formData.company_name);
-                    alert('There was an error submitting the application. Opening your email client instead...');
-                    window.location.href = 'mailto:info@organiyaglobal.com?subject=' + mailtoSubject + '&body=' + encodeURIComponent(emailMessage);
-                })
-                .finally(function() {
-                    submitButton.disabled = false;
-                    submitButton.textContent = originalButtonText;
-                });
-        } else {
-            // Fallback if EmailJS is not loaded
-            const mailtoSubject = encodeURIComponent('Distributorship Application from ' + formData.company_name);
-            window.location.href = 'mailto:info@organiyaglobal.com?subject=' + mailtoSubject + '&body=' + encodeURIComponent(emailMessage);
-            submitButton.disabled = false;
-            submitButton.textContent = originalButtonText;
-        }
     });
 }
 
