@@ -50,22 +50,22 @@
   /* --------------------
      HEADER
   -------------------- */
-  header {
-    background: var(--text-light);
-    padding: 12px 0;
-    border-bottom: 2px solid #e0e0e0;
-    position: sticky;
-    top: 0;
-    z-index: 1000;
-    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-  }
+header {
+  background: var(--text-light);
+  padding: 0 0 4px 0;
+  border-bottom: none;
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+}
   
-  nav {
-    display: flex;
-    align-items: center;
-    gap: 40px;
-    position: relative;
-  }
+nav {
+  display: flex;
+  align-items: flex-end;
+  gap: 32px;
+  position: relative;
+}
   
   .nav-toggle {
     display: none;
@@ -83,31 +83,39 @@
     }
   }
 
-  nav ul {
-    list-style: none;
-    display: flex;
-    gap: 30px;
-    margin-left: auto;
-  }
+nav ul {
+  list-style: none;
+  display: flex;
+  gap: 22px;
+  margin-left: auto;
+  margin-bottom: 4px;
+}
   
-  nav ul li a {
-    text-decoration: none;
-    color: var(--green-primary);
-    font-weight: 600;
-    font-size: 18px;
-    transition: 0.3s;
-  }
+nav ul li a {
+  text-decoration: none;
+  color: var(--green-primary);
+  font-weight: 400;
+  font-size: 18px;
+  transition: color 0.3s ease, border-bottom-color 0.3s ease, font-weight 0.3s ease;
+  line-height: 1.0;
+  padding-bottom: 6px;
+  border-bottom: 2px solid transparent;
+}
   
   nav ul li a:hover {
-    color: var(--green-light);
+  color: var(--green-dark);
+  font-weight: 700;
+  border-bottom-color: var(--red-accent);
   }
   
   .logo {
     position: relative;
+    display: flex;
+    align-items: center;
   }
   
   .logo img {
-    height: 95px;
+    height: 86px;
     width: auto;
     display: block;
     max-width: none;
@@ -188,23 +196,84 @@
     color: var(--text-light) !important;
   }
   
-  .hero .btn-primary {
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
-  }
-  
-  .btn-primary {
-    background: var(--green-primary);
-    color: var(--text-light);
+  /* --------------------
+     BUTTON SYSTEM
+  -------------------- */
+  /* Base button styles - shared by all buttons */
+  .btn-primary,
+  .btn-secondary,
+  .btn-light,
+  .btn-outline {
+    display: inline-block;
     padding: 14px 30px;
     border-radius: 6px;
     text-decoration: none;
     font-weight: 600;
-    transition: background 0.3s;
+    font-size: 16px;
+    text-align: center;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    border: none;
+    line-height: 1.4;
+  }
+
+  /* Primary button - dark green background, white text */
+  .btn-primary {
+    background: var(--green-primary);
+    color: var(--text-light);
   }
   
   .btn-primary:hover {
     background: var(--green-light);
     color: var(--text-light);
+  }
+
+  /* Secondary button - medium green background, white text */
+  .btn-secondary {
+    background: var(--green-medium);
+    color: var(--text-light);
+  }
+  
+  .btn-secondary:hover {
+    background: var(--green-primary);
+    color: var(--text-light);
+  }
+
+  /* Light button - light green background, dark green text */
+  .btn-light {
+    background: var(--green-light);
+    color: var(--green-primary);
+  }
+  
+  .btn-light:hover {
+    background: var(--green-medium);
+    color: var(--text-light);
+  }
+
+  /* Outline button - transparent background, white border */
+  .btn-outline {
+    background: rgba(255, 255, 255, 0.2);
+    color: var(--text-light);
+    border: 2px solid var(--text-light);
+  }
+  
+  .btn-outline:hover {
+    background: var(--text-light);
+    color: var(--green-primary);
+  }
+
+  /* Hero section button with enhanced shadow */
+  .hero .btn-primary,
+  .hero .btn-secondary,
+  .hero .btn-light,
+  .hero .btn-outline {
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+  }
+
+  /* Inline button variant - for product cards */
+  .btn-inline {
+    display: inline-block;
+    margin-top: 10px;
   }
   
   /* --------------------
@@ -279,11 +348,6 @@
     height: 60px;
     margin-bottom: 15px;
     width: auto;
-  }
-  
-  /* Icon color override - use green light color A0C747 */
-  .icon-grid div img[src$=".svg"] {
-    filter: brightness(0) saturate(100%) invert(70%) sepia(69%) saturate(600%) hue-rotate(43deg) brightness(99%) contrast(82%);
   }
   
   /* Image placeholder styling for missing images */
@@ -813,27 +877,28 @@
   @media (max-width: 768px) {
     .container {
       width: 95%;
-      padding: 12px 0;
+      padding: 8px 0;
     }
     
     header {
-      padding: 10px 0;
+      padding: 0 0 4px 0;
     }
     
-    nav ul {
-      position: absolute;
-      top: 100%;
-      right: 0;
-      left: 0;
-      background: var(--text-light);
-      flex-direction: column;
-      align-items: flex-start;
-      gap: 0;
-      padding: 0 20px;
-      border-bottom: 2px solid #e0e0e0;
-      box-shadow: 0 6px 12px rgba(0, 0, 0, 0.08);
-      display: none;
-    }
+  nav ul {
+    position: absolute;
+    top: 100%;
+    right: 0;
+    left: 0;
+    background: var(--text-light);
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0;
+    padding: 0 20px;
+    border-bottom: 2px solid #e0e0e0;
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.08);
+    display: none;
+    margin-bottom: 0;
+  }
     
     nav ul li {
       width: 100%;
@@ -858,6 +923,25 @@
     .nav-toggle {
       display: block;
     }
+  
+  nav {
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .nav-toggle {
+    order: 1;
+    margin-left: 0;
+  }
+
+  .logo {
+    order: 2;
+    margin: 0 auto;
+  }
+
+  nav ul {
+    order: 3;
+  }
     
     .hero h1 {
       font-size: 32px;
@@ -909,7 +993,7 @@
     }
     
     .logo img {
-      height: 60px;
+      height: 50px;
     }
 
     .superfood-item img {
@@ -939,7 +1023,7 @@
     }
     
     .logo img {
-      height: 40px;
+      height: 32px;
     }
 
     .superfood-item img {
