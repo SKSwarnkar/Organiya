@@ -8,16 +8,16 @@
    Based on Organiya brand colors
 -------------------- */
 :root {
-    --green-primary: #126C36;     /* Primary green for text and branding */
-    --green-light: #A0C747;       /* Light green accent for variations */
+    --green-primary: #106020;     /* Primary green for text and branding */
+    --green-light: #78B414;       /* Light green accent for variations */
     --red-accent: #E34234;        /* Reddish accent for variations */
-    --green-dark: #126C36;        /* Primary dark green */
-    --green-medium: #A0C747;      /* Medium green accent */
+    --green-dark: #106020;        /* Primary dark green */
+    --green-medium: #78B414;      /* Medium green accent */
     --orange-accent: #E34234;     /* Accent color from logo */
     --beige-light: #FBF8F3;
     --background-white: #FFFFFF;  /* Pure white background */
     --gold-accent: #D1A056;
-    --text-dark: #126C36;         /* Primary green for text */
+    --text-dark: #106020;         /* Primary green for text */
     --text-light: #FFFFFF;
   }
   
